@@ -15,11 +15,11 @@ class Array:
     def isEmpty(self):
         return self.size() == 0
     
-    def get(self, index:int):
+    def get(self, index: int):
         if index >= self.size(): raise Exception('Index: {} is out of bound'.format(index))
         return self.__arr[index]
 
-    def set(self, index:int, item):
+    def set(self, index: int, item: object):
         if index >= self.size(): raise Exception('Index: {} is out of bound'.format(index))
         self.__arr[index] = item
         
@@ -28,7 +28,7 @@ class Array:
             self.__arr[i] = None
         self.__length = 0
 
-    def add(self, item):
+    def add(self, item: object):
         # Resize Array if we reach the maximum capacity
         if(self.size() + 1 >= self.__capacity):
             self.__capacity *= 2
@@ -42,7 +42,7 @@ class Array:
         self.__arr[self.size()] =  item
         self.__length += 1 
 
-    def removeAt(self, index:int):
+    def removeAt(self, index: int):
         if(index >= self.size()  or index < 0): raise Exception('Index: {} is out of bound'.format(index))
 
         # Decrease array size if length reaches half the capacity
@@ -85,8 +85,8 @@ class Array:
             
         return -1
     
-    def contains(self, item:object): 
-        return indexOf(item) is not -1
+    def contains(self, item: object): 
+        return self.indexOf(item) is not -1
     
     
     def toString(self):
