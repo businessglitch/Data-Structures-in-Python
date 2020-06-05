@@ -1,0 +1,4 @@
+# Byte-compiled / optimized / DLL files
+.pyc
+dynamic_array/__pycache__/
+linked_list/__pycache__/

@@ -102,14 +102,3 @@ class Array:
         string += ']'
 
         return string
-        
-        
-# # Some Tests
-# my_arr = Array(4)
-# print('Size: ', my_arr.size())
-# my_arr.add(3)
-# my_arr.add(1)
-# my_arr.add(2)
-# my_arr.add(4)
-# print('Size: ', my_arr.size())
-# print('ToString: ', my_arr.toString())
