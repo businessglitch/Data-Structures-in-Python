@@ -3,21 +3,33 @@ import linked_list
 
 class TestLinkedList(unittest.TestCase):
 
-    def test_getSize(self):
+    def test_size(self):
         ll = linked_list.LinkedList()
-        self.assertEqual(ll.getSize(), 0)
+        self.assertEqual(ll.size(), 0)
         ll.add('a') 
         ll.add('b') 
         
-        self.assertEqual(ll.getSize(), 2)
+        self.assertEqual(ll.size(), 2)
 
-    def test_peek(self):
+    def test_peekFirst(self):
         ll = linked_list.LinkedList()
-        self.assertEqual(ll.peek(), None)
+        with self.assertRaises(Exception) as context:
+            ll.peekFirst()
+
         ll.add('a') 
+        self.assertEqual(ll.peekFirst(), 'a')
         ll.add('b') 
-        
-        self.assertEqual(ll.peek(), 'a')
+        self.assertEqual(ll.peekFirst(), 'a')
+
+    def test_peekLast(self):
+        ll = linked_list.LinkedList()
+        with self.assertRaises(Exception) as context:
+            ll.peekLast()
+                  
+        ll.add('a') 
+        self.assertEqual(ll.peekLast(), 'a')
+        ll.add('b') 
+        self.assertEqual(ll.peekLast(), 'b')
 
     def test_clear(self):
         ll = linked_list.LinkedList()
@@ -38,6 +50,27 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(ll.removeAt(1), 'b')
         self.assertEqual(ll.removeAt(0), 'a')
         self.assertEqual(ll.removeAt(0), 'c')
+
+    def test_removeFirst(self):
+        ll = linked_list.LinkedList()
+            # Test out of bound
+        with self.assertRaises(Exception):
+            ll.removeFirst()
+        ll.add('a') 
+        ll.add('b') 
+        ll.add('c')
+        self.assertEqual(ll.removeFirst(), 'a')
+
+    def test_removeLast(self):
+        ll = linked_list.LinkedList()
+        # Test out of bound
+        with self.assertRaises(Exception):
+            ll.removeLast()
+
+        ll.add('a') 
+        ll.add('b') 
+        ll.add('c')
+        self.assertEqual(ll.removeLast(), 'c')
 
     def test_pop(self):
         ll = linked_list.LinkedList()
@@ -84,7 +117,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(ll.contains('b'), True)
         self.assertEqual(ll.contains('c'), False)
 
-
     def test_isEmpty(self):
         ll = linked_list.LinkedList()
         self.assertEqual(ll.isEmpty(), True)
@@ -98,8 +130,6 @@ class TestLinkedList(unittest.TestCase):
         ll.add('b') 
         ll.add('a') 
         self.assertEqual(ll.toString(), 'b-->a-->None')
-
-
 
 
 

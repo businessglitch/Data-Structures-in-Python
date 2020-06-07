@@ -3,85 +3,150 @@ class LinkedList:
         def __init__(self, data):
             self.data = data
             self.next = None
+            self.prev = None
         
         def toString(self):
             return str(self.data)
 
         
     def __init__(self):
-        self.__length = 0
+        self.__size = 0
         self.__head = None
+        self.__tail = None
 
     # O(1)
-    def getSize(self):
-        return self.__length
+    def size(self):
+        return self.__size
     
-    def peek(self):
-        if self.__head: 
-            return self.__head.data
-        else: 
-           return None
+    def peekFirst(self):
+        if self.isEmpty(): raise Exception ('Cannot perform peek on empty list')
+
+        return self.__head.data
+    
+    def peekLast(self):
+        if self.isEmpty(): raise Exception ('Cannot perform peek on empty list')
+        
+        return self.__tail.data
          
     # Clears out the list in O(n) time
     def clear(self):
-        if self.isEmpty():
-            return True
-        else:
+        trav = self.__head
+        while trav is not None:
+            next = trav.next
+            trav.data = None
+            trav.next =  trav.prev = None
+            trav = next
 
-            while self.__head.next is not None:
-                next = self.__head.next
-                self.__head.data = None
-                self.__head.next = None
-                self.__head = next
+        self.__head = self.__tail = None
+        self.__size = 0
 
-            self.__head.data = None
-            self.__head = None
-            self.__length = 0
-
-            return True
+        return True
     
     # Adds to the back of the list FIFO O(n)
     def add(self, item: object):
-        # Assign as head if list is empty
-        if self.getSize() == 0:
-           self. __head = self.Node(item)
-        else: 
-            trav = self.__head
-            while trav.next is not None:
-                trav = trav.next
-            trav.next = self.Node(item)
+        self.addLast(item)
+      
+    # Add to the head of the linked list
+    def addFirst(self, item: object):
+        if self.isEmpty():
+            self.__head = self.__tail = self.Node(item)
+        else:
+            newNode = self.Node(item)
+            self.__head.prev = newNode
+            newNode.next = self.__head
+            self.__head = newNode
 
-        self.__length += 1
+        self.__size += 1
+
+    # Add to the back(Tail) of the linked list
+    def addLast(self, item: object):
+        if self.isEmpty():
+            self.__head = self.__tail = self.Node(item)
+        else:
+            newNode = self.Node(item)
+            newNode.prev = self.__tail
+            self.__tail.next = newNode
+            self.__tail = newNode
+
+        self.__size += 1
+
+    def addAt(self, item: object, index:int):
+        if index >= self.size() or index < 0: raise Exception ('Index:{} is out of bound'.format(index))
+
+        if index == 0:
+            self.addFirst(item)
+            return
+        
+        if index == self.size():
+            self.addLast(item)
+            return
+
+        i = 0
+        trav = self.__head
+        while i is not index:
+            trav = trav.next
+
+        newNode = self.Node(item)
+        newNode.next = trav
+        newNode.prev = trav.prev
+        trav.prev.next = newNode
+        trav.prev = newNode
+        
+        self.__size += 1
+
+    def removeFirst(self):
+        if self.isEmpty(): raise Exception('Cannot perform removeFirst on an empty list')
+
+        next = self.__head.next
+        data = self.__head.data
+        self.__head.data =  self.__head.next = None
+        self.__head = next
+        self.__size -= 1
+
+        if self.isEmpty():
+            self.__tail = None
+
+        return data
+
+    def removeLast(self):
+        if self.isEmpty(): raise Exception('Cannot perform removeFirst on an empty list')
+
+        prev = self.__tail.prev
+        data = self.__tail.data
+        self.__tail.data =  self.__tail.prev = None
+        self.__tail = prev
+        self.__size -= 1
+
+        if self.isEmpty():
+            self.__head = None
+
+        return data
+
+    def __remove(self, node: Node) -> Node:
+        node.next.prev = node.prev
+        node.prev.next = node.next
+
+        data = node.data
+        node.next = node.prev =  None
+        node.data = None
+        self.__size -= 1
+
+        return data
 
     # Remove item at index and return data. O(n)
     def removeAt(self, index: int):
-       
-        if index >= self.getSize() or index < 0: raise Exception ('Index:{} is out of bound'.format(index))
+        if index >= self.size() or index < 0: raise Exception ('Index:{} is out of bound'.format(index))
 
+        if index == 0: return self.removeFirst()
+        if index == self.size(): return self.removeLast()
+        
         i = 0
-        prev = None
         trav = self.__head
-
         while i is not index:
-            prev = trav
             trav = trav.next
             i += 1
 
-        next = trav.next
-        data = trav.data
-        trav.data = None
-        trav.next = None
-        trav = None
-
-        if prev is not None:
-            prev.next = next
-        else:
-            self.__head = next
-      
-
-        self.__length -= 1
-
-        return data
+        return self.__remove(trav)
 
     # Remove head and return data
     def pop(self):
@@ -93,11 +158,11 @@ class LinkedList:
         self.__head.data = None
         self.__head.next = None
         self.__head = next
-        self.__length -= 1
+        self.__size -= 1
         return data
     
     def get(self, index: int):
-        if index >= self.getSize() or index < 0: raise Exception ('Index:{} is out of bound'.format(index))
+        if index >= self.size() or index < 0: raise Exception ('Index:{} is out of bound'.format(index))
 
         i = 0
         trav = self.__head
@@ -124,7 +189,7 @@ class LinkedList:
         return self.indexOf(item) is not -1
 
     def isEmpty(self):
-        return self.getSize() == 0
+        return self.size() == 0
 
     def toString(self):
         if self.isEmpty():
