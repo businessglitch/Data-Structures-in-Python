@@ -2,3 +2,5 @@
 .pyc
 dynamic_array/__pycache__/
 linked_list/__pycache__/
+stack/__pycache__/
+queue/__pycache__/
